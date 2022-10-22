@@ -6,7 +6,9 @@ package cmd
 
 import (
 	"fmt"
+	"net/http"
 
+	"github.com/horitaka/oidc-cli/lib/server"
 	"github.com/spf13/cobra"
 )
 
@@ -20,9 +22,15 @@ and usage of using your command. For example:
 Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("login called")
-	},
+	Run: handler,
+}
+
+func handler(cmd *cobra.Command, args []string) {
+	fmt.Println("Open http://localhost:8080/login")
+
+	http.HandleFunc("/login", server.Login)
+	http.HandleFunc("/callback", server.Token)
+	http.ListenAndServe(":8080", nil)
 }
 
 func init() {
