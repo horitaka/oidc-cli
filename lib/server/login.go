@@ -37,4 +37,6 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	w.Header().Set("location", u.String())
 	w.WriteHeader(http.StatusFound)
+
+	// TODO: login後にプログラムを終了する
 }

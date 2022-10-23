@@ -94,7 +94,7 @@ func convertResToJosn(res *http.Response) PostTokenResponse {
 // TODO: utils/token_ioに移動
 
 func saveToken(res PostTokenResponse) {
-	f, err := os.Create("/tmp/outhtoken.toml")
+	f, err := os.Create("/tmp/token.toml")
 	if err != nil {
 		// return err
 		fmt.Println(err)

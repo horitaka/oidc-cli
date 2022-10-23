@@ -22,15 +22,17 @@ and usage of using your command. For example:
 Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
-	Run: handler,
+	RunE: handleloginCmd,
 }
 
-func handler(cmd *cobra.Command, args []string) {
+func handleloginCmd(cmd *cobra.Command, args []string) error {
 	fmt.Println("Open http://localhost:8080/login")
 
 	http.HandleFunc("/login", server.Login)
 	http.HandleFunc("/callback", server.Token)
 	http.ListenAndServe(":8080", nil)
+
+	return nil
 }
 
 func init() {

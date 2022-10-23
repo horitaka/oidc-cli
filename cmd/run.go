@@ -5,9 +5,15 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"github.com/horitaka/oidc-cli/lib/api"
+	"fmt"
 
+	"github.com/horitaka/oidc-cli/lib/api"
+	"github.com/manifoldco/promptui"
 	"github.com/spf13/cobra"
+)
+
+const (
+	GET_USERINFO = "Get userinfo"
 )
 
 // runCmd represents the run command
@@ -20,11 +26,31 @@ and usage of using your command. For example:
 Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
-	RunE: handleCommand,
+	RunE: hadleRunCmd,
 }
 
-func handleCommand(cmd *cobra.Command, args []string) error {
-	api.GetUserInfo()
+func hadleRunCmd(cmd *cobra.Command, args []string) error {
+	prompt := promptui.Select{
+		Label: "Select API",
+		Items: []string{GET_USERINFO, "get xxx"},
+	}
+
+	_, result, err := prompt.Run()
+
+	if err != nil {
+		fmt.Printf("Prompt failed %v\n", err)
+		return err
+	}
+
+	fmt.Printf("You choose %q\n", result)
+
+	switch result {
+	case GET_USERINFO:
+		api.GetUserInfo()
+	default:
+		fmt.Printf("No API matched %q\n", result)
+	}
+
 	return nil
 }
 

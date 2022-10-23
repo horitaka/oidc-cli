@@ -9,6 +9,7 @@ require (
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/imdario/mergo v0.3.13 // indirect
 	github.com/joho/godotenv v1.4.0 // indirect
+	github.com/manifoldco/promptui v0.9.0 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/pelletier/go-toml v1.9.5 // indirect
 	github.com/spf13/cobra v1.6.0
