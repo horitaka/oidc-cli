@@ -7,18 +7,18 @@ import (
 	"net/url"
 	"os"
 
+	"github.com/horitaka/oidc-cli/constants"
 	"github.com/joho/godotenv"
 )
 
-const AUTH_BASE_URL = "https://accounts.google.com/o/oauth2/v2/auth"
-
 func Login(w http.ResponseWriter, r *http.Request) {
+	// TODO: リファクタリング
 	err := godotenv.Load(".env")
 	if err != nil {
 		fmt.Printf("Failed to load env file: %v", err)
 	}
 
-	u, err := url.Parse(AUTH_BASE_URL)
+	u, err := url.Parse(constants.AUTH_URL)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -27,7 +27,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	q.Set("client_id", clienId)
 	q.Set("scope", "openid email profile")
 	q.Set("response_type", "code")
-	q.Set("redirect_uri", "http://localhost:8080/callback")
+	q.Set("redirect_uri", constants.CALLBACK_URL)
 	q.Set("state", "state") // TODO
 	q.Set("nonce", "nonce") // TODO
 
@@ -39,4 +39,5 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusFound)
 
 	// TODO: login後にプログラムを終了する
+	// os.Exit(1)
 }

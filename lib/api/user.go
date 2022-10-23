@@ -4,26 +4,21 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"os"
 
-	"github.com/BurntSushi/toml"
+	"github.com/horitaka/oidc-cli/constants"
+	"github.com/horitaka/oidc-cli/lib/utils"
 )
 
-type TokenConfig struct {
-	AccessToken  string `toml:"accesstoken"`
-	RefreshToken string `toml:"refreshtoken"`
-}
-
 func GetUserInfo() {
-	token, _ := loadToken()
-	fmt.Println(token.AccessToken)
-	fmt.Println(token.RefreshToken)
+	token, _ := utils.LoadToken()
 
 	client := &http.Client{}
-
-	req, err := http.NewRequest("GET", "https://www.googleapis.com/oauth2/v1/userinfo", nil) // TODO: 定数はconstantsに移動する
+	req, err := http.NewRequest("GET", constants.USERINFO_URL, nil)
 	req.Header.Add("Authorization", "Bearer"+token.AccessToken)
 	resp, err := client.Do(req)
+
+	// TODO: tokenの有効期限切れの場合はrefresh tokenでaccess tokenを取得し直す
+	// TODO: refresh tokenの期限が切れている場合はメッセージを出して再ログインをさせる
 
 	if err != nil {
 		panic(err)
@@ -33,23 +28,6 @@ func GetUserInfo() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(resp.Status)
+	// fmt.Println(resp.Status)
 	fmt.Println(string(body))
-}
-
-// TODO: utilsに移動
-func loadToken() (TokenConfig, error) {
-	file := "/tmp/token.toml"
-	_, err := os.Stat(file)
-
-	conf := TokenConfig{}
-
-	if err == nil {
-		_, err := toml.DecodeFile(file, &conf)
-		if err != nil {
-			return conf, err
-		}
-	}
-
-	return conf, nil
 }
