@@ -32,7 +32,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	q.Set("nonce", "nonce") // TODO
 
 	u.RawQuery = q.Encode()
-	fmt.Println(u)
+	// fmt.Println(u)
 
 	w.Header().Set("Content-Type", "text/html")
 	w.Header().Set("location", u.String())

@@ -3,6 +3,7 @@ module github.com/horitaka/oidc-cli
 go 1.15
 
 require (
+	github.com/BurntSushi/toml v1.2.1 // indirect
 	github.com/cosmtrek/air v1.40.4 // indirect
 	github.com/creack/pty v1.1.18 // indirect
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
