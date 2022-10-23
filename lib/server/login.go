@@ -25,7 +25,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	q := u.Query()
 	clienId := os.Getenv("CLIENT_ID")
 	q.Set("client_id", clienId)
-	q.Set("scope", "openid")
+	q.Set("scope", "openid email profile")
 	q.Set("response_type", "code")
 	q.Set("redirect_uri", "http://localhost:8080/callback")
 	q.Set("state", "state") // TODO

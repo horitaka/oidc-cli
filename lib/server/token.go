@@ -12,8 +12,10 @@ import (
 	"github.com/joho/godotenv"
 )
 
+// TODO: api/constantnsに移動
 const AUTH_TOKEN_URL = "https://oauth2.googleapis.com/token"
 
+// TODO: apiに移動
 type PostTokenResponse struct {
 	AccessToken  string `json:"access_token"`
 	ExpiresIn    int    `json:"expires_in"`
@@ -21,6 +23,7 @@ type PostTokenResponse struct {
 	IdToken      string `json:"id_token"`
 }
 
+// TODO: utilsに移動
 type TokenConfig struct {
 	AccessToken  string `toml:"accesstoken"`
 	RefreshToken string `toml:"refreshtoken"`
@@ -65,12 +68,13 @@ func getParams(url *url.URL) CallbackUrlQueryParam {
 	return params
 }
 
+// TODO: apiに移動
 func postToken(param CallbackUrlQueryParam) (*http.Response, error) {
 	v := url.Values{}
 	v.Set("code", param.Code)
 	v.Add("client_id", os.Getenv("CLIENT_ID"))
 	v.Add("client_secret", os.Getenv("CLIENT_SECRET"))
-	v.Add("redirect_uri", "http://localhost:8080/callback")
+	v.Add("redirect_uri", "http://localhost:8080/callback") // TODO: constantnsに移動する
 	v.Add("grant_type", "authorization_code")
 
 	resp, err := http.PostForm(AUTH_TOKEN_URL, v)
@@ -86,6 +90,8 @@ func convertResToJosn(res *http.Response) PostTokenResponse {
 
 	return posts
 }
+
+// TODO: utils/token_ioに移動
 
 func saveToken(res PostTokenResponse) {
 	f, err := os.Create("/tmp/outhtoken.toml")
