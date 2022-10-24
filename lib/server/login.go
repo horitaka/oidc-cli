@@ -2,28 +2,26 @@ package server
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"net/url"
-	"os"
+
+	"github.com/pkg/errors"
 
 	"github.com/horitaka/oidc-cli/constants"
-	"github.com/joho/godotenv"
+	"github.com/horitaka/oidc-cli/lib/utils"
 )
 
 func Login(w http.ResponseWriter, r *http.Request) {
-	// TODO: リファクタリング
-	err := godotenv.Load(".env")
-	if err != nil {
-		fmt.Printf("Failed to load env file: %v", err)
-	}
+	authClient := utils.LoadEnv()
 
 	u, err := url.Parse(constants.AUTH_URL)
 	if err != nil {
-		log.Fatal(err)
+		wrappedError := errors.Wrap(err, "Failed to parse URL.")
+		fmt.Printf("%+v\n", wrappedError)
 	}
+
 	q := u.Query()
-	clienId := os.Getenv("CLIENT_ID")
+	clienId := authClient.ClientId
 	q.Set("client_id", clienId)
 	q.Set("scope", "openid email profile")
 	q.Set("response_type", "code")
@@ -32,12 +30,8 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	q.Set("nonce", "nonce") // TODO
 
 	u.RawQuery = q.Encode()
-	// fmt.Println(u)
 
 	w.Header().Set("Content-Type", "text/html")
 	w.Header().Set("location", u.String())
 	w.WriteHeader(http.StatusFound)
-
-	// TODO: login後にプログラムを終了する
-	// os.Exit(1)
 }
