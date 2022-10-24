@@ -14,7 +14,8 @@ import (
 )
 
 const (
-	GET_USERINFO = "Get userinfo"
+	GET_USERINFO  = "Get Userinfo"
+	GET_CALENDARS = "Get Calendar List"
 )
 
 // runCmd represents the run command
@@ -30,7 +31,7 @@ func hadleRunCmd(cmd *cobra.Command, args []string) error {
 
 	prompt := promptui.Select{
 		Label: "Select API",
-		Items: []string{GET_USERINFO, "get xxx"},
+		Items: []string{GET_USERINFO, GET_CALENDARS, "get xxx"},
 	}
 
 	_, result, err := prompt.Run()
@@ -41,6 +42,8 @@ func hadleRunCmd(cmd *cobra.Command, args []string) error {
 	switch result {
 	case GET_USERINFO:
 		err = api.GetUserInfo()
+	case GET_CALENDARS:
+		err = api.GetCalendars()
 	default:
 		fmt.Printf("No API matched %q\n", result)
 	}

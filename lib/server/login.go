@@ -23,7 +23,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	q := u.Query()
 	clienId := authClient.ClientId
 	q.Set("client_id", clienId)
-	q.Set("scope", "openid email profile")
+	q.Set("scope", "openid email profile https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/calendar")
 	q.Set("response_type", "code")
 	q.Set("redirect_uri", constants.CALLBACK_URL)
 	q.Set("state", "state") // TODO
