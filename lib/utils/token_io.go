@@ -1,10 +1,10 @@
 package utils
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/BurntSushi/toml"
+	"github.com/pkg/errors"
 )
 
 type TokenConfig struct {
@@ -23,19 +23,19 @@ func LoadToken() (TokenConfig, error) {
 	if err == nil {
 		_, err := toml.DecodeFile(file, &conf)
 		if err != nil {
-			return conf, err
+			wrappedError := errors.Wrapf(err, "Faield load file: %s.", FILE_PATH)
+			return conf, wrappedError
 		}
 	}
 
 	return conf, nil
 }
 
-func SaveToken(token TokenConfig) {
+func SaveToken(token TokenConfig) error {
 	f, err := os.Create(FILE_PATH)
 	if err != nil {
-		// return err
-		fmt.Println(err)
-		return
+		return errors.Wrapf(err, "Faield create file: %s.", FILE_PATH)
 	}
 	toml.NewEncoder(f).Encode(token)
+	return nil
 }

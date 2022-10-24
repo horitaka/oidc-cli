@@ -19,24 +19,26 @@ func Token(w http.ResponseWriter, r *http.Request) {
 
 	resp, err := api.PostToken(tokenApiParam)
 	if err != nil {
-		fmt.Fprintln(w, err)
+		fmt.Println(err)
 	}
 
 	token := utils.TokenConfig{
 		AccessToken:  resp.AccessToken,
 		RefreshToken: resp.RefreshToken,
 	}
-	utils.SaveToken(token)
+	err = utils.SaveToken(token)
+	if err != nil {
+		fmt.Println(err)
+	}
 
-	fmt.Fprintln(w, "Succeeded in obtaining token. Return to terminal and use CLI to call API.")
+	fmt.Fprintln(w, "Succeeded in obtaining token.\nReturn to terminal and use CLI to call API.")
 
 	// debug
 	// fmt.Fprintln(w, tokenApiParam.State)
-	fmt.Fprintln(w, tokenApiParam.Code)
+	// fmt.Fprintln(w, tokenApiParam.Code)
 	// fmt.Fprintln(w, res)
 	// fmt.Fprintln(w, res.StatusCode)
-	fmt.Fprintln(w, resp.RefreshToken)
-
+	// fmt.Fprintln(w, resp.RefreshToken)
 }
 
 func getParams(url *url.URL) api.PostTokenParam {
