@@ -7,18 +7,18 @@ import (
 	"github.com/pkg/errors"
 )
 
-type TokenConfig struct {
+type Token struct {
 	AccessToken  string `toml:"accesstoken"`
 	RefreshToken string `toml:"refreshtoken"`
 }
 
 const FILE_PATH = "/tmp/token.toml"
 
-func LoadToken() (TokenConfig, error) {
+func LoadToken() (Token, error) {
 	file := FILE_PATH
 	_, err := os.Stat(file)
 
-	conf := TokenConfig{}
+	conf := Token{}
 
 	if err == nil {
 		_, err := toml.DecodeFile(file, &conf)
@@ -31,7 +31,7 @@ func LoadToken() (TokenConfig, error) {
 	return conf, nil
 }
 
-func SaveToken(token TokenConfig) error {
+func SaveToken(token Token) error {
 	f, err := os.Create(FILE_PATH)
 	if err != nil {
 		return errors.Wrapf(err, "Faield create file: %s.", FILE_PATH)

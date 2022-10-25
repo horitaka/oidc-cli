@@ -22,7 +22,7 @@ func Token(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 	}
 
-	token := utils.TokenConfig{
+	token := utils.Token{
 		AccessToken:  resp.AccessToken,
 		RefreshToken: resp.RefreshToken,
 	}
