@@ -3,6 +3,7 @@ package utils
 import (
 	"io/ioutil"
 	"net/http"
+	"net/url"
 
 	"github.com/pkg/errors"
 )
@@ -13,13 +14,19 @@ type Response struct {
 	Error      error
 }
 
-func Get(url string) Response {
+func Get(urlStr string, queryMap map[string]string) Response {
 	result := Response{}
-
 	token, _ := LoadToken()
 
+	u, _ := url.Parse(urlStr)
+	q := url.Values{}
+	for k, v := range queryMap {
+		q.Set(k, v)
+	}
+	u.RawQuery = q.Encode()
+
 	client := &http.Client{}
-	req, err := http.NewRequest("GET", url, nil)
+	req, err := http.NewRequest("GET", u.String(), nil)
 	req.Header.Add("Authorization", "Bearer "+token.AccessToken)
 	resp, err := client.Do(req)
 	if err != nil {

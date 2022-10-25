@@ -8,7 +8,8 @@ import (
 )
 
 func GetCalendars() error {
-	resp := utils.Get(constants.CALENDERS_URL)
+	query := map[string]string{"maxResults": "1"}
+	resp := utils.Get(constants.CALENDERS_URL, query)
 	// fmt.Println(resp.Status)
 	fmt.Println(string(resp.Body))
 	return resp.Error
