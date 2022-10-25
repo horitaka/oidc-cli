@@ -1,8 +1,6 @@
 package api
 
 import (
-	"fmt"
-
 	"github.com/horitaka/oidc-cli/constants"
 	"github.com/horitaka/oidc-cli/lib/utils"
 )
@@ -10,7 +8,15 @@ import (
 func GetCalendars() error {
 	query := map[string]string{"maxResults": "1"}
 	resp := utils.Get(constants.CALENDERS_URL, query)
-	// fmt.Println(resp.Status)
-	fmt.Println(string(resp.Body))
+	utils.PrintResponse(resp)
+	return resp.Error
+}
+
+func CreateCalendar() error {
+	body := map[string]string{
+		"summary": "test",
+	}
+	resp := utils.Post(constants.CALENDER_URL, body)
+	utils.PrintResponse(resp)
 	return resp.Error
 }

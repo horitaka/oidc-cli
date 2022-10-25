@@ -1,15 +1,12 @@
 package api
 
 import (
-	"fmt"
-
 	"github.com/horitaka/oidc-cli/constants"
 	"github.com/horitaka/oidc-cli/lib/utils"
 )
 
 func GetUserInfo() error {
 	resp := utils.Get(constants.USERINFO_URL, nil)
-	// fmt.Println(resp.Status)
-	fmt.Println(string(resp.Body))
+	utils.PrintResponse(resp)
 	return resp.Error
 }
